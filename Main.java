@@ -3,6 +3,7 @@ import org.w3c.dom.ls.LSOutput;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipOutputStream;
 
 public class Main {
 
@@ -78,6 +79,30 @@ public class Main {
             }catch (IOException ex){
                 System.out.println(ex.getMessage());
             }
+
+            String aga = "ну ты понял да";
+            try(FileWriter nu = new FileWriter(temp_txt,true)){
+                nu.write(aga);
+                nu.write("\n");
+            }catch (IOException ex){
+                System.out.println(ex.getMessage());
+            }
+
+                //обьявление GameProgress
+
+        GameProgress first = new GameProgress(100,1,25,100.50);
+        GameProgress second = new GameProgress(90,2,24,98.5);
+        GameProgress third = new GameProgress(200,3,45,3000.33);
+            //используем метод для записи прогресса
+        saveGame(first,"E://Games1/savegames/saveFirst.dat");
+        saveGame(second,"E://Games1/savegames/saveSecond.dat");
+        saveGame(third,"E://Games1/savegames/saveThird.dat");
+
+        //создание List для маршрутов файлов архивации
+        List<String> dat = new ArrayList<>();
+        dat.add("E://Games1/savegames/saveFirst.dat");
+        dat.add("E://Games1/savegames/saveSecond.dat");
+        dat.add("E://Games1/savegames/saveThird.dat");
     }
     public static String makeDirectory(File file) {
         if (!file.exists()) {
@@ -96,5 +121,22 @@ public class Main {
         }catch (IOException ex){
             System.out.println(ex.getMessage());
         }return null;
+    }
+
+    // метод для создания прогресса для игры
+    public static void saveGame(GameProgress pro,String str){
+        try(FileOutputStream fos = new FileOutputStream(str);
+            ObjectOutputStream oos = new ObjectOutputStream(fos)){
+            oos.writeObject(pro);
+
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+    //Метод для архивации файлов ZIP
+    public static void makeZip(String str,List list){
+        try(ZipOutputStream fos = new ZipOutputStream(new FileOutputStream(str));
+        FileInputStream oos = new FileInputStream(list))
+
     }
 }
