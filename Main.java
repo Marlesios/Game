@@ -3,6 +3,7 @@ import org.w3c.dom.ls.LSOutput;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class Main {
@@ -103,6 +104,8 @@ public class Main {
         dat.add("E://Games1/savegames/saveFirst.dat");
         dat.add("E://Games1/savegames/saveSecond.dat");
         dat.add("E://Games1/savegames/saveThird.dat");
+
+        makeZip("E://Games1/savegames/zip.zip",dat);
     }
     public static String makeDirectory(File file) {
         if (!file.exists()) {
@@ -135,8 +138,18 @@ public class Main {
     }
     //Метод для архивации файлов ZIP
     public static void makeZip(String str,List list){
+        for(int i=0; i<list.size();i++){
         try(ZipOutputStream fos = new ZipOutputStream(new FileOutputStream(str));
-        FileInputStream oos = new FileInputStream(list))
+        FileInputStream oos = new FileInputStream((String) list.get(i))){
+            ZipEntry entry = new ZipEntry((String) list.get(i));
+            byte[] buffer = new byte[oos.available()];
+            fos.write(buffer);
+            fos.closeEntry();
+
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+        }
 
     }
 }
