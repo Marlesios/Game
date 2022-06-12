@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         StringBuilder sb = new StringBuilder();
         List<File> game = new ArrayList<>();
-        List<File> files =new ArrayList<>();
+        List<File> files = new ArrayList<>();
 
 
         //Главный директорий
@@ -23,20 +23,20 @@ public class Main {
         File temp = new File("E://Games1/temp");
 
         //директории в папку src
-        File main = new File(src,"main");
-        File test = new File(src,"test");
+        File main = new File(src, "main");
+        File test = new File(src, "test");
 
         //Файлы в папку /games/src/main
-        File Main_java = new File(main,"Main.java");
-        File Java_utils = new File(main,"Utils.java");
+        File Main_java = new File(main, "Main.java");
+        File Java_utils = new File(main, "Utils.java");
 
         //Файлы в /Games/res
-        File drawables = new File(res,"drawables");
-        File vectors = new File(res,"vectors");
-        File icons = new File(res,"icons");
+        File drawables = new File(res, "drawables");
+        File vectors = new File(res, "vectors");
+        File icons = new File(res, "icons");
 
         //temp.txt для сохранений логов
-        File temp_txt = new File(temp,"temp.txt");
+        File temp_txt = new File(temp, "temp.txt");
 
         game.add(Games);
         game.add(src);
@@ -60,44 +60,44 @@ public class Main {
         //temp.txt
         files.add(temp_txt);
 
-                 //цикл для добавления директорий
-                for(File file: game){
-                    //makeDirectory(file);
-                   sb.append(makeDirectory(file));
-                }
-                //цикл для добавлений файлов
-                for(File file: files){
-                   // makeFile(file);
-                    sb.append(makeFile(file));
-                }
+        //цикл для добавления директорий
+        for (File file : game) {
+            //makeDirectory(file);
+            sb.append(makeDirectory(file));
+        }
+        //цикл для добавлений файлов
+        for (File file : files) {
+            // makeFile(file);
+            sb.append(makeFile(file));
+        }
 
-            // добавляем все логи в записную книгу temp.txt
-            String one = sb.toString();
-            byte[] buffer = one.getBytes();
-            try(FileOutputStream writer = new FileOutputStream(temp_txt);
-                 BufferedOutputStream bos = new BufferedOutputStream(writer)) {
-                    bos.write(buffer,0,buffer.length);
-            }catch (IOException ex){
-                System.out.println(ex.getMessage());
-            }
+        // добавляем все логи в записную книгу temp.txt
+        String one = sb.toString();
+        byte[] buffer = one.getBytes();
+        try (FileOutputStream writer = new FileOutputStream(temp_txt);
+             BufferedOutputStream bos = new BufferedOutputStream(writer)) {
+            bos.write(buffer, 0, buffer.length);
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
 
-            String aga = "ну ты понял да";
-            try(FileWriter nu = new FileWriter(temp_txt,true)){
-                nu.write(aga);
-                nu.write("\n");
-            }catch (IOException ex){
-                System.out.println(ex.getMessage());
-            }
+        String aga = "ну ты понял да";
+        try (FileWriter nu = new FileWriter(temp_txt, true)) {
+            nu.write(aga);
+            nu.write("\n");
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
 
-                //обьявление GameProgress
+        //обьявление GameProgress
 
-        GameProgress first = new GameProgress(100,1,25,100.50);
-        GameProgress second = new GameProgress(90,2,24,98.5);
-        GameProgress third = new GameProgress(200,3,45,3000.33);
-            //используем метод для записи прогресса
-        saveGame(first,"E://Games1/savegames/saveFirst.dat");
-        saveGame(second,"E://Games1/savegames/saveSecond.dat");
-        saveGame(third,"E://Games1/savegames/saveThird.dat");
+        GameProgress first = new GameProgress(100, 1, 25, 100.50);
+        GameProgress second = new GameProgress(90, 2, 24, 98.5);
+        GameProgress third = new GameProgress(200, 3, 45, 3000.33);
+        //используем метод для записи прогресса
+        saveGame(first, "E://Games1/savegames/saveFirst.dat");
+        saveGame(second, "E://Games1/savegames/saveSecond.dat");
+        saveGame(third, "E://Games1/savegames/saveThird.dat");
 
         //создание List для маршрутов файлов архивации
         List<String> dat = new ArrayList<>();
@@ -105,20 +105,21 @@ public class Main {
         dat.add("E://Games1/savegames/saveSecond.dat");
         dat.add("E://Games1/savegames/saveThird.dat");
 
-//        makeZip("E://Games1/savegames/zip.zip","E://Games1/savegames/saveFirst.dat");
+        makeZip("E://Games1/savegames/zip.zip", dat);
 
-        try(ZipOutputStream fos = new ZipOutputStream(new FileOutputStream("E://Games1/savegames/zip.zip"));
-        FileInputStream zos = new FileInputStream("E://Games1/savegames/saveFirst.dat")){
+        try (ZipOutputStream fos = new ZipOutputStream(new FileOutputStream("E://Games1/savegames/zip.zip"));
+             FileInputStream zos = new FileInputStream("E://Games1/savegames/saveFirst.dat")) {
             ZipEntry entry = new ZipEntry("saveFirst.dat");
             fos.putNextEntry(entry);
             byte[] buffer1 = new byte[zos.available()];
             zos.read(buffer1);
             fos.write(buffer1);
             fos.closeEntry();
-        }catch(Exception ex){
+        } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
+
     public static String makeDirectory(File file) {
         if (!file.exists()) {
             if (file.mkdir()) {
@@ -126,43 +127,49 @@ public class Main {
             } else {
                 System.out.println("не получилось");
             }
-        }return null;
+        }
+        return null;
     }
-    public static String makeFile(File file){
-        try{
-            if(file.createNewFile())
+
+    public static String makeFile(File file) {
+        try {
+            if (file.createNewFile())
                 return "Файл " + file.getName() + " создан \n";
 
-        }catch (IOException ex){
+        } catch (IOException ex) {
             System.out.println(ex.getMessage());
-        }return null;
+        }
+        return null;
     }
 
     // метод для создания прогресса для игры
-    public static void saveGame(GameProgress pro,String str){
-        try(FileOutputStream fos = new FileOutputStream(str);
-            ObjectOutputStream oos = new ObjectOutputStream(fos)){
+    public static void saveGame(GameProgress pro, String str) {
+        try (FileOutputStream fos = new FileOutputStream(str);
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(pro);
 
-        }catch(Exception ex){
+        } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
-    //Метод для архивации файлов ZIP
-//    public static void makeZip(String str,String list){
-////        for(int i=0; i<list.size();i++){
-//        try(ZipOutputStream fos = new ZipOutputStream(new FileOutputStream(str));
-//        FileInputStream oos = new FileInputStream(list)){
-//            ZipEntry entry = new ZipEntry(list);
-//            fos.putNextEntry(entry);
-//            byte[] buffer = new byte[oos.available()];
-//            fos.write(buffer);
-//            fos.closeEntry();
-//
-//        }catch (Exception ex){
-//            System.out.println(ex.getMessage());
-////        }
 
-//    }
-//    }
+    //Метод для архивации файлов ZIP
+    public static void makeZip(String str,List list) {
+        for (int i = 0; i < list.size(); i++) {
+            try (ZipOutputStream fos = new ZipOutputStream(new FileOutputStream(str));
+                 FileInputStream oos = new FileInputStream((String) list.get(i))) {
+                ZipEntry entry = new ZipEntry(list.get(i).toString());
+                fos.putNextEntry(entry);
+                byte[] buffer = new byte[oos.available()];
+                oos.read(buffer);
+                fos.write(buffer);
+                fos.closeEntry();
+
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+//        }
+
+            }
+        }
+    }
 }
