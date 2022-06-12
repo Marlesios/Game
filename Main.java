@@ -8,7 +8,7 @@ import java.util.zip.ZipOutputStream;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         StringBuilder sb = new StringBuilder();
         List<File> game = new ArrayList<>();
         List<File> files = new ArrayList<>();
@@ -107,19 +107,8 @@ public class Main {
 
         makeZip("E://Games1/savegames/zip.zip", dat);
 
-        try (ZipOutputStream fos = new ZipOutputStream(new FileOutputStream("E://Games1/savegames/zip.zip"));
-             FileInputStream zos = new FileInputStream("E://Games1/savegames/saveFirst.dat")) {
-            ZipEntry entry = new ZipEntry("saveFirst.dat");
-            fos.putNextEntry(entry);
-            byte[] buffer1 = new byte[zos.available()];
-            zos.read(buffer1);
-            fos.write(buffer1);
-            fos.closeEntry();
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
 
+    }
     public static String makeDirectory(File file) {
         if (!file.exists()) {
             if (file.mkdir()) {
@@ -154,22 +143,22 @@ public class Main {
     }
 
     //Метод для архивации файлов ZIP
-    public static void makeZip(String str,List list) {
-        for (int i = 0; i < list.size(); i++) {
-            try (ZipOutputStream fos = new ZipOutputStream(new FileOutputStream(str));
-                 FileInputStream oos = new FileInputStream((String) list.get(i))) {
-                ZipEntry entry = new ZipEntry(list.get(i).toString());
-                fos.putNextEntry(entry);
-                byte[] buffer = new byte[oos.available()];
-                oos.read(buffer);
-                fos.write(buffer);
-                fos.closeEntry();
+    public static void makeZip(String str,List<String> list)  {
 
-            } catch (Exception ex) {
+            try{ ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(str));
+                {
+                    for (String path : list) {
+                        FileInputStream fos = new FileInputStream(path);
+                        ZipEntry entry = new ZipEntry((String) path);
+                        zout.putNextEntry(entry);
+                        byte[] buffer = new byte[fos.available()];
+                        zout.write(buffer);
+                        zout.closeEntry();
+
+                    }
+                }
+            }catch(Exception ex){
                 System.out.println(ex.getMessage());
-//        }
-
             }
-        }
     }
 }
