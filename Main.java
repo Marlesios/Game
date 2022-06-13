@@ -144,21 +144,24 @@ public class Main {
 
     //Метод для архивации файлов ZIP
     public static void makeZip(String str,List<String> list)  {
+        FileInputStream fis;
+        try{ ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(str));
 
-            try{ ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(str));
-                {
-                    for (String path : list) {
-                        FileInputStream fos = new FileInputStream(path);
-                        ZipEntry entry = new ZipEntry((String) path);
-                        zout.putNextEntry(entry);
-                        byte[] buffer = new byte[fos.available()];
-                        zout.write(buffer);
-                        zout.closeEntry();
+            for (String path: list) {
+                File input = new File(path);
+                fis = new FileInputStream(input);
+                ZipEntry entry = new ZipEntry(input.getName());
+                zout.putNextEntry(entry);
+                byte[] buffer = new byte[fis.available()];
+                zout.write(buffer);
+                zout.flush();
+                fis.close();
+                input.deleteOnExit();
+            }zout.close();
 
-                    }
-                }
-            }catch(Exception ex){
-                System.out.println(ex.getMessage());
-            }
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
+        }
+
     }
 }
